@@ -255,4 +255,13 @@ class CorrectedCommand(object):
         logs.debug(u'PYTHONIOENCODING: {}'.format(
             os.environ.get('PYTHONIOENCODING', '!!not-set!!')))
 
+        # FIXME: find a better place for this, maybe?
+        cmd_file = os.getenv("TF_CMD_FILE")
+        if cmd_file:
+            if cmd_file.startswith("/c/tmp/"):  # FIXME: use a constant from somewhere (shell?)
+                cmd_file = cmd_file[2:]
+            with open(cmd_file, "w") as f:
+                f.write(self._get_script())
+            return
+
         print(self._get_script())
